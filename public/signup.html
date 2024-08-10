@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style1.css">
+    <title>Signup Form</title>
+</head>
+<body>
+    <div class="wrapper">
+        <form id="signupForm">
+            <h1>Signup</h1>
+            <div class="input-box">
+                <i class="fas fa-user"></i>
+                <input type="text" id="name" placeholder="Name" required>
+            </div>
+            <div class="input-box">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email" required>
+            </div>
+            <div class="input-box">
+                <i class="fas fa-phone"></i>
+                <input type="text" id="phone" placeholder="Phone Number" required>
+            </div>
+            <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <div class="input-box">
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" id="address" placeholder="Address" required>
+            </div>
+            <div class="input-box">
+                <label for="role">Role:</label>
+                <select id="role" required>
+                    <option value="student">Student</option>
+                    <option value="instructor">Instructor</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Signup</button>
+            <div id="errorMessage" class="error-message"></div>
+        </form>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const address = document.getElementById('address').value;
+            const role = document.getElementById('role').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            const signupEndpoint = role === 'student' ? '/student-signup' : '/instructor-signup';
+
+            fetch(signupEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, phone, password, address }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'index.html';
+                } else {
+                    errorMessage.textContent = data.message;
+                    errorMessage.style.color = 'red';
+                    errorMessage.style.marginTop = '15px';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMessage.textContent = 'An error occurred';
+                errorMessage.style.color = 'red';
+                errorMessage.style.marginTop = '15px';
+            });
+        });
+    </script>
+</body>
+</html>

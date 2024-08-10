@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            padding-top: 20px;
+            position: fixed;
+        }
+        .sidebar a {
+            color: white;
+            padding: 15px;
+            display: block;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            height: 40px;
+        }
+        .card-deck .card {
+            min-width: 18rem;
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-weight: bold;
+        }
+        .top-items, .product-details {
+            margin-top: 20px;
+        }
+        .top-items img, .product-details img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="text-center">Logo</h2>
+        <nav>
+            <a href="home.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="sales.html">Sales</a>
+            <a href="report.html">Reports</a>
+        </nav>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <div class="header-left">
+                <h1>Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <i class='bx bxs-user'></i>
+                <span>Admin</span>
+            </div>
+        </div>
+        <div class="card-deck">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Sales Activity</h5>
+                    <p class="card-text">228 Qty to be packed</p>
+                    <p class="card-text">6 Pkgs to be shipped</p>
+                    <p class="card-text">10 To be delivered</p>
+                    <p class="card-text">474 To be invoiced</p>
+                </div>
+            </div>
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Inventory Summary</h5>
+                    <p class="card-text">Quantity in Hand: 10,458</p>
+                    <p class="card-text">Quantity to be Received: 168</p>
+                </div>
+            </div>
+        </div>
+        <div class="product-details card">
+            <div class="card-body">
+                <h5 class="card-title">Product Details</h5>
+                <p>Low Stock Items: 3</p>
+                <p>All Item Group: 39</p>
+                <p>All Items: 190</p>
+                <p>Unconfirmed Items: 121</p>
+            </div>
+        </div>
+        <div class="top-items card">
+            <div class="card-body">
+                <h5 class="card-title">Top Selling Items</h5>
+                <div class="d-flex align-items-center">
+                    <img src="iphone.jpg" alt="Item Image">
+                    <div>
+                        <p>Iphone</p>
+                        <p>171 pcs</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <img src="samsung.jpg" alt="Item Image">
+                    <div>
+                        <p>Samsung S24</p>
+                        <p>45 sets</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="purchase-order card">
+            <div class="card-body">
+                <h5 class="card-title">Purchase Order</h5>
+                <p>Quantity Ordered: 652</p>
+            </div>
+        </div>
+        <div class="sales-order card">
+            <div class="card-body">
+                <h5 class="card-title">Sales Order</h5>
+                <p>Draft: 0</p>
+                <p>Confirmed: 50</p>
+                <p>Packed: 0</p>
+                <p>Shipped: 0</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

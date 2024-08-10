@@ -1,0 +1,379 @@
+/* Import Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 240px;
+    background: linear-gradient(180deg, #333, #444);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    min-height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border-right: 2px solid #007bff; /* Blue border on the right */
+    transition: width 0.3s;
+}
+
+.sidebar:hover {
+    width: 260px;
+}
+
+.sidebar .logo {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+    width: 100%;
+    padding: 0;
+}
+
+.sidebar ul li {
+    width: 100%;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 15px 20px;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s, padding-left 0.3s, border-left 0.3s;
+    border-left: 5px solid transparent; /* Blue border on active item */
+}
+
+.sidebar ul li a.active, .sidebar ul li a:hover {
+    background-color: #555;
+    border-left: 5px solid #007bff; /* Blue border on active item */
+    padding-left: 30px;
+}
+
+/* Main Content Styles */
+.main-content {
+    margin-left: 240px;
+    padding: 20px;
+    background-color: #fff;
+    min-height: 100vh;
+    transition: margin-left 0.3s;
+    border: 2px solid #007bff; /* Blue border around main content */
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 2px solid #007bff; /* Blue border at the bottom of the header */
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.header .user-info a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.header .user-info a:hover {
+    color: #0056b3;
+}
+
+/* Overview Cards */
+.overview-cards, .sales-overview {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.overview-cards .card, .sales-overview .overview-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 22%;
+    border: 2px solid #007bff; /* Blue border around cards */
+    transition: box-shadow 0.3s, transform 0.3s;
+    position: relative; /* Added to position image absolutely within card */
+}
+
+.sales-overview .overview-card {
+    width: 30%;
+}
+
+.overview-cards .card:hover, .sales-overview .overview-card:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+.overview-cards .card h3, .sales-overview .overview-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.overview-cards .card p, .sales-overview .overview-card p {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+.card img, .overview-card img {
+    position: absolute;
+    bottom: 10px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 90%; /* Adjust width as needed */
+    border: 2px solid #007bff; /* Optional border around the image */
+    border-radius: 10px; /* Optional rounded corners */
+}
+
+/* Charts */
+.charts {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.charts canvas {
+    width: 45%;
+    max-height: 400px;
+    border: 2px solid #007bff; /* Blue border around charts */
+    border-radius: 10px;
+}
+
+/* Login Page Styles */
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('img.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.wrapper {
+    width: 420px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    border-radius: 10px;
+    padding: 30px 40px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 2px solid #007bff; /* Blue border around login wrapper */
+    position: relative; /* Added to position image absolutely within wrapper */
+}
+
+.wrapper h1 {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: 2px solid #007bff; /* Blue border around input */
+    border-radius: 25px;
+    font-size: 16px;
+    color: #333; /* Dark color for input text */
+    padding: 0 20px;
+    padding-left: 45px;
+    transition: border-color 0.3s;
+}
+
+.input-box input::placeholder {
+    color: #333; /* Change to dark color for visibility on light background */
+}
+
+.input-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #007bff;
+}
+
+.input-box input:focus {
+    border-color: #0056b3;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin: 15px 0;
+}
+
+.remember-forgot label input {
+    accent-color: #007bff;
+    margin-right: 3px;
+}
+
+.remember-forgot a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.remember-forgot a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Button Styles */
+.btn {
+    width: 100%;
+    height: 45px;
+    background: #007bff;
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Error Message */
+.error-message {
+    color: #dc3545;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Register Link */
+.register-link {
+    font-size: 14px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.register-link p a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link p a:hover {
+    text-decoration: underline;
+}
+
+/* Update Course Page Styles */
+.update-course-wrapper {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border: 2px solid #007bff; /* Blue border around the form */
+}
+
+.update-course-wrapper h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 2px solid #007bff; /* Blue border under the header */
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.form-group input, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #007bff; /* Blue border around input fields */
+    border-radius: 8px;
+    font-size: 16px;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #0056b3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+    height: 150px; /* Adjust as needed */
+}
+
+button[type="submit"] {
+    width: 100%;
+    height: 50px;
+    background: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+input[type="file"] {
+    margin-top: 8px;
+}

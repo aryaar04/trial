@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles for the course cards and buttons */
+        .course-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 15px;
+            padding: 20px;
+            border: 2px solid #007bff;
+            position: relative;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .course-card img {
+            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .course-card h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .course-card p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .course-card .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .course-card .btn-update,
+        .course-card .btn-delete {
+            background: #007bff;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-card .btn-update:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-card .btn-delete {
+            background: #dc3545;
+        }
+
+        .course-card .btn-delete:hover {
+            background-color: #c82333;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">Course Manager</div>
+        <ul>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Course Inventory</h1>
+            <a href="index.html" class="user-info">Logout</a>
+        </div>
+
+        <div class="update-course-wrapper">
+            <h1>Add New Course</h1>
+            <form id="addCourseForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="courseTitle">Title:</label>
+                    <input type="text" id="courseTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseDescription">Description:</label>
+                    <textarea id="courseDescription" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="courseCategory">Category:</label>
+                    <input type="text" id="courseCategory" name="category" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseImage">Course Image:</label>
+                    <input type="file" id="courseImage" name="image" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="coursePDF">Course PDF:</label>
+                    <input type="file" id="coursePDF" name="pdf" accept=".pdf">
+                </div>
+                <button type="submit">Add Course</button>
+            </form>
+        </div>
+
+        <div id="courses">
+            <!-- Course items will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addCourseForm = document.getElementById('addCourseForm');
+            const coursesContainer = document.getElementById('courses');
+
+            async function fetchCourses() {
+                const response = await fetch('http://localhost:3000/api/courses');
+                const courses = await response.json();
+                coursesContainer.innerHTML = '';
+                courses.forEach(course => {
+                    const courseElement = document.createElement('div');
+                    courseElement.classList.add('course-card');
+                    const imageUrl = course.image ? `http://localhost:3000/api/courses/image/${course.image}` : 'default-image-url';
+                    const pdfLink = course.pdf ? `http://localhost:3000/api/courses/pdf/${course.pdf}` : '#';
+                    courseElement.innerHTML = `
+                        ${course.image ? `<img src="${imageUrl}" alt="${course.title}">` : ''}
+                        <h3>${course.title}</h3>
+                        <p>${course.description}</p>
+                        <p><strong>Category:</strong> ${course.category}</p>
+                        ${course.pdf ? `<a href="${pdfLink}" target="_blank">Download PDF</a>` : '<p>No PDF available</p>'}
+                        <div class="btn-container">
+                            <button class="btn-update" data-id="${course._id}">Update</button>
+                            <button class="btn-delete" data-id="${course._id}">Delete</button>
+                        </div>
+                    `;
+                    coursesContainer.appendChild(courseElement);
+                });
+
+                // Add event listeners for update and delete buttons
+                document.querySelectorAll('.btn-update').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const courseId = button.getAttribute('data-id');
+                        window.location.href = `update.html?id=${courseId}`;
+                    });
+                });
+
+                document.querySelectorAll('.btn-delete').forEach(button => {
+                    button.addEventListener('click', async () => {
+                        const courseId = button.getAttribute('data-id');
+                        if (confirm('Are you sure you want to delete this course?')) {
+                            try {
+                                const response = await fetch(`http://localhost:3000/api/courses/${courseId}`, {
+                                    method: 'DELETE'
+                                });
+                                if (response.ok) {
+                                    fetchCourses();
+                                } else {
+                                    alert('Failed to delete course.');
+                                }
+                            } catch (error) {
+                                console.error('Error:', error);
+                            }
+                        }
+                    });
+                });
+            }
+
+            fetchCourses();
+
+            addCourseForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const formData = new FormData(addCourseForm);
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/courses', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (response.ok) {
+                        addCourseForm.reset();
+                        fetchCourses();
+                    } else {
+                        alert('Failed to add course.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

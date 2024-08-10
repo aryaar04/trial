@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Global Styles */
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        button {
+            font-family: "Poppins", sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        /* Header */
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 30px;
+            color: #333;
+        }
+
+        /* Logout Button */
+        #logout-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        #logout-btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Courses List */
+        #courses-list, #enrollments-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        .course-card, .enrollment-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 15px;
+            padding: 20px;
+            width: 300px;
+            border: 2px solid #007bff;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .course-card:hover, .enrollment-card:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .course-card img {
+            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .course-card h3 {
+            font-size: 18px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .course-card p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .course-card button {
+            background: #007bff;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-card button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .enrollment-card h4 {
+            font-size: 16px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .enrollment-card p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .course-card, .enrollment-card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="logout-btn">Logout</button>
+    <h1>Available Courses</h1>
+    <div id="courses-list"></div>
+
+    <h2>Your Enrollments</h2>
+    <div id="enrollments-list"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const studentId = 'student-id'; // Replace this with the actual student ID
+
+            // Function to fetch and display available courses
+            const loadCourses = async () => {
+                try {
+                    const response = await fetch('/api/courses');
+                    const courses = await response.json();
+                    const coursesListDiv = document.getElementById('courses-list');
+                    coursesListDiv.innerHTML = '';
+
+                    courses.forEach(course => {
+                        const courseDiv = document.createElement('div');
+                        courseDiv.classList.add('course-card');
+                        const imageUrl = course.image ? `/api/courses/image/${course.image}` : 'default-image-url';
+                        courseDiv.innerHTML = `
+                            ${course.image ? `<img src="${imageUrl}" alt="${course.title}">` : ''}
+                            <h3>${course.title}</h3>
+                            <p>${course.description}</p>
+                            <p>Category: ${course.category}</p>
+                            <button onclick="enroll('${course._id}')">Enroll</button>
+                        `;
+                        coursesListDiv.appendChild(courseDiv);
+                    });
+                } catch (error) {
+                    console.error('Error loading courses:', error);
+                }
+            };
+
+            // Function to enroll in a course
+            window.enroll = async (courseId) => {
+                try {
+                    const response = await fetch('/api/enroll', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ studentId, courseId })
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert('Enrollment successful!');
+                        loadEnrollments(); // Refresh enrollments list
+                    } else {
+                        alert('Enrollment failed: ' + result.message);
+                    }
+                } catch (error) {
+                    console.error('Error enrolling:', error);
+                }
+            };
+
+            // Function to fetch and display enrollments
+            const loadEnrollments = async () => {
+                try {
+                    const response = await fetch(`/api/enrollments/${studentId}`);
+                    const enrollments = await response.json();
+                    const enrollmentsListDiv = document.getElementById('enrollments-list');
+                    enrollmentsListDiv.innerHTML = '';
+
+                    enrollments.forEach(enrollment => {
+                        const enrollmentDiv = document.createElement('div');
+                        enrollmentDiv.classList.add('enrollment-card');
+                        enrollmentDiv.innerHTML = `
+                            <h4>Course ID: ${enrollment.courseId._id}</h4>
+                            <p>Title: ${enrollment.courseId.title}</p>
+                            <p>Description: ${enrollment.courseId.description}</p>
+                            <p>Date Enrolled: ${new Date(enrollment.date).toLocaleDateString()}</p>
+                        `;
+                        enrollmentsListDiv.appendChild(enrollmentDiv);
+                    });
+                } catch (error) {
+                    console.error('Error loading enrollments:', error);
+                }
+            };
+
+            loadCourses(); // Initial load of courses
+            loadEnrollments(); // Initial load of enrollments
+        });
+    </script>
+    <script src="scripts.js"></script>
+    <script>
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            window.location.href = '/logout';
+        });
+    </script>
+</body>
+</html>

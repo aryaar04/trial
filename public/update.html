@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Course</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Update Course</h1>
+    <form id="updateCourseForm" enctype="multipart/form-data">
+        <input type="hidden" id="courseId" name="id" value="">
+        <div class="form-group">
+            <label for="courseTitle">Title:</label>
+            <input type="text" id="courseTitle" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="courseDescription">Description:</label>
+            <textarea id="courseDescription" name="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="courseCategory">Category:</label>
+            <input type="text" id="courseCategory" name="category" required>
+        </div>
+        <div class="form-group">
+            <label for="courseImage">Course Image:</label>
+            <input type="file" id="courseImage" name="image" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label for="coursePDF">Course PDF:</label>
+            <input type="file" id="coursePDF" name="pdf" accept=".pdf">
+        </div>
+        <button type="submit">Update Course</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const courseId = new URLSearchParams(window.location.search).get('id');
+            document.getElementById('courseId').value = courseId;
+
+            async function loadCourse() {
+                const response = await fetch(`http://localhost:3000/api/courses/${courseId}`);
+                const course = await response.json();
+                if (course) {
+                    document.getElementById('courseTitle').value = course.title;
+                    document.getElementById('courseDescription').value = course.description;
+                    document.getElementById('courseCategory').value = course.category;
+                } else {
+                    alert('Course not found');
+                }
+            }
+
+            loadCourse();
+
+            document.getElementById('updateCourseForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const response = await fetch(`http://localhost:3000/api/courses/${courseId}`, {
+                    method: 'PUT',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Course updated successfully');
+                    window.location.href = 'inventory.html'; // Redirect to your dashboard or courses list
+                } else {
+                    console.error('Error updating course:', await response.text());
+                    alert('Error updating course');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
